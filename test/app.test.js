@@ -40,4 +40,17 @@ describe('app get request', () => {
         });
     });
   });
+
+  it('should filter apps in accordance to selected paramter', () =>{
+    const validFilters = ['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card'];
+    validFilters.forEach(filter =>{
+      return supertest(app).get('/apps').query({filter: filter})
+        .then(res => {
+          for( let i = 0; i <= res.body.length-1; i++){
+            const item = res.body[i];
+            expect(validFilters.includes(item[filter]));
+          }
+        });
+    });
+  })
 });
