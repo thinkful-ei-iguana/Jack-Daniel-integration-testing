@@ -27,7 +27,7 @@ describe('app get request', () => {
     return supertest(app).get('/apps').query({sort: 'lol'}).expect(400);
   });
 
-  it('should sort apps in accordance to selected parameter', () => {
+  const sortTest = it('should sort apps in accordance to selected parameter', () => {
     const validSorts = ['rating', 'app'];
     validSorts.forEach(sort => {
       return supertest(app).get('/apps').query({sort: sort})
@@ -41,7 +41,7 @@ describe('app get request', () => {
     });
   });
 
-  it('should filter apps in accordance to selected paramter', () =>{
+  const filterTest = it('should filter apps in accordance to selected paramter', () =>{
     const validFilters = ['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card'];
     validFilters.forEach(filter =>{
       return supertest(app).get('/apps').query({filter: filter})
@@ -52,5 +52,29 @@ describe('app get request', () => {
           }
         });
     });
+  });
+  //check sorting and filtering
+
+  it('should filter and sort at the same time', () => {
+    return supertest(app).get('/apps').query({sort: 'rating', filter: 'action'})
+      .then(res => {
+        for (let i=0; i <= res.body.length-2; ++i){
+          const app1 = res.body[i];
+          const app2 = res.body[i+1];
+          expect(app1[sort] <= app2[sort]);
+          expect(app1[filter] === 'action');
+        }
+      })
+    /*const validFilters = ['action', 'puzzle', 'strategy', 'casual', 'arcade', 'card'];
+    const validSorts = ['rating', 'app'];
+    validFilters.forEach(filter =>{
+      validSorts.forEach(sort =>{
+        return supertest(app).get('/apps').query({sort: sort, filter: filter})
+        .then(res => {
+          
+        })
+      })
+    })*/
   })
+
 });

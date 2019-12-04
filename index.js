@@ -17,6 +17,7 @@ app.get('/apps', (req, res) => {
     } else {
       res.status(400);
       res.send('filter is invalid');
+      return;
     }
   }
   const validSorts = ['rating', 'app'];
@@ -29,6 +30,7 @@ app.get('/apps', (req, res) => {
     } else {
       res.status(400);
       res.send('sort is invalid');
+      return;
     }
   }
   res.send(filteredApps);
